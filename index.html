@@ -8,25 +8,36 @@
     <body class="bg-gray-800">
         <div id="app" class="flex h-screen text-white font-mono">
             <div class="m-auto">
-                <TransitionGroup class="p-2 grid grid-cols-10 gap-12" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
+                <div class="p-10 grid grid-cols-7 gap-12" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
                     <div v-for="number, i in sortedArray" :id="i">
-                        <div class="p-3 w-114 h-48 text-center algin-middle content-center text-2xl outline-1 outline-offset-2 outline-solid rounded-full"></div>
-                        <div class="outline-1 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-gray-400 transition-all select-none">
+                        <div v-if="activeNumbers.includes(i)" class="outline-1 outline-yellow-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none">
+                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
+                        </div>
+                        <div v-else-if="keep.includes(i)" class="outline-1 outline-green-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-green-600 transition-all select-none">
+                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
+                        </div>
+                        <div v-else-if="switching.includes(i)" class="outline-1 outline-red-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-red-600 transition-all select-none">
+                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
+                        </div>
+                        <div v-else class="outline-1 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-gray-400 transition-all select-none">
                             <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
                         </div>
                     </div>
-                </TransitionGroup>
+                </div>
                 <div class="flex justify-center">
                     <div class="flex justify-center p-6">
-                        <div v-on:click="genNewArr()" class="text-white rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-on:click="genNewArr()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Generate New Array</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-on:click="sort()" class="text-white rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Sort List</div>
                         </div>
                     </div>
+                </div>
+                <div class="flex justify-center p-6 text-lg">
+                    Number of Passes: {{passes}}, Current State: {{state}}, {{i}}
                 </div>
             </div>
         </div>
@@ -35,34 +46,68 @@
     const app = Vue.createApp({
         data() {
             return {
-                sortedArray: []
+                sortedArray : [],
+                activeNumbers : [],
+                keep : [],
+                switching : [],
+                proceed : 0,
+                i : 0,
+                passes : 0,
+                state : "idle"
             }
         },
         mounted(){
             this.genNewArr()
-            
+            const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
             
         },
         methods: {
             genNewArr(){
+                this.i = 0
                 this.sortedArray = []
-                for (let i = 0; i < 10; i++){
+                for (let i = 0; i < 7; i++){
                     this.sortedArray.push(Math.floor(Math.random() * 101))
                 }
             },
-            sort(){
-                for (let i = 0; i < this.sortedArray.length; i++){
-                    for (let i = 0; i < this.sortedArray.length; i++){
-                        
-                        if (i != this.sortedArray.length){
-                            if (this.sortedArray[i] > this.sortedArray[i+1]){
-                                let temp = this.sortedArray[i]
-                                this.sortedArray[i] = this.sortedArray[i+1]
-                                this.sortedArray[i+1] = temp
-                            }
+            async sort(){
+                if (this.proceed % 2 != 0){
+                    if (this.i <= this.sortedArray.length - 1){
+                        this.activeNumbers = []
+                        this.keep = []
+                        this.switching = []
+                        if (this.sortedArray[this.i] > this.sortedArray[this.i+1]){
+                            let temp = this.sortedArray[this.i]
+                            this.sortedArray[this.i] = this.sortedArray[this.i+1]
+                            this.sortedArray[this.i+1] = temp
+                            this.switching.push(this.i)
+                            this.switching.push(this.i+1)
+                            this.state = "switch"
                         }
+                        else{
+                            this.keep.push(this.i)
+                            this.keep.push(this.i+1)
+                            this.state = "keep"
+                        }
+                        this.i += 1
+                    }
+                    else{
+                        this.i = 0
+                        this.passes += 1
+                    }
+                }else{
+                    if (this.i <= this.sortedArray.length - 2){
+                        this.activeNumbers = []
+                        this.keep = []
+                        this.switching = []
+                        this.activeNumbers.push(this.i+0)
+                        this.activeNumbers.push(this.i+1)
+                        this.state = "check"
+                    }else{
+                        this.i = 0
+                        this.passes += 1
                     }
                 }
+                this.proceed += 1
             }
         }
     })
