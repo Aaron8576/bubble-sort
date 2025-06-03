@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="main.js"></script>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            sup nerds
+        </div>
+    </body>
+    <script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                message: "Hello World!",
+                arrayToSort : [],
+                sortedArray: []
+            }
+        },
+        methods: {
+            copyArr(arrToCopy){
+                return [...arrToCopy]
+            },
+            populateArr(arr){
+                
+            }
+        }
+    })
+
+    app.mount('#app')
+
+    </script>
+</html>
