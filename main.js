@@ -7,7 +7,6 @@ for (let i = 0; i < 20; i++){
 function copyArray(arrayToCopy){
     return [...arrayToCopy]
 }
-console.log(arrayToSort)
 
 function bubbleSort(arrayToSort){
     const sortedArray = copyArray(arrayToSort)
@@ -25,4 +24,5 @@ function bubbleSort(arrayToSort){
     return sortedArray
 }
 
+console.log(arrayToSort)
 console.log(bubbleSort(arrayToSort))

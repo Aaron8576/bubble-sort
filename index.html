@@ -3,33 +3,69 @@
     <head>
         <script src="main.js"></script>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body>
-        <div id="app">
-            sup nerds
+    <body class="bg-gray-800">
+        <div id="app" class="flex h-screen text-white font-mono">
+            <div class="m-auto">
+                <TransitionGroup class="p-2 grid grid-cols-10 gap-12" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
+                    <div v-for="number, i in sortedArray" :id="i">
+                        <div class="p-3 w-114 h-48 text-center algin-middle content-center text-2xl outline-1 outline-offset-2 outline-solid rounded-full"></div>
+                        <div class="outline-1 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-gray-400 transition-all select-none">
+                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
+                        </div>
+                    </div>
+                </TransitionGroup>
+                <div class="flex justify-center">
+                    <div class="flex justify-center p-6">
+                        <div v-on:click="genNewArr()" class="text-white rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">Generate New Array</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center p-6">
+                        <div v-on:click="sort()" class="text-white rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">Sort List</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
     <script>
-
     const app = Vue.createApp({
         data() {
             return {
-                message: "Hello World!",
-                arrayToSort : [],
                 sortedArray: []
             }
         },
+        mounted(){
+            this.genNewArr()
+            
+            
+        },
         methods: {
-            copyArr(arrToCopy){
-                return [...arrToCopy]
+            genNewArr(){
+                this.sortedArray = []
+                for (let i = 0; i < 10; i++){
+                    this.sortedArray.push(Math.floor(Math.random() * 101))
+                }
             },
-            populateArr(arr){
-                
+            sort(){
+                for (let i = 0; i < this.sortedArray.length; i++){
+                    for (let i = 0; i < this.sortedArray.length; i++){
+                        
+                        if (i != this.sortedArray.length){
+                            if (this.sortedArray[i] > this.sortedArray[i+1]){
+                                let temp = this.sortedArray[i]
+                                this.sortedArray[i] = this.sortedArray[i+1]
+                                this.sortedArray[i+1] = temp
+                            }
+                        }
+                    }
+                }
             }
         }
     })
-
     app.mount('#app')
-
     </script>
 </html>
