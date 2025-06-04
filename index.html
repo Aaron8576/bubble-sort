@@ -8,15 +8,12 @@
         <div class="flex justify-center p-6 text-white font-mono text-4xl">Bubble Sort Algorithm</div>
         <div class="flex h-9/10 text-white font-mono">
             <div class="m-auto">
-                <div v-if="complete" class="text-3xl flex justify-centerp-2">Sort Complete</div>
+                <div v-if="canceled & complete" class="text-3xl flex justify-center p-2">Sort Canceled</div>
+                <div v-else-if="complete &! canceled" class="text-3xl flex justify-center p-2">Sort Complete</div>
                 <div v-else class="p-5"></div>
                 <div class="p-10 grid grid-cols-7 gap-[3vh]" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
                     <div v-for="number, i in sortedArray" :id="i">
-                        <div :class="[activeNumbers.includes(i) ? 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg select-none' :
-                         keep.includes(i) ? 'outline-[0.3vh] outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none' :
-                         switching.includes(i) & switching[0] == i ? 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[19vh]' :
-                         switching.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]' :
-                         'outline-[0.2vh] outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none']">
+                        <div :class="[activeNumbers.includes(i) ? activeC : keep.includes(i) ? keepC : switching.includes(i) & switching[0] == i ? switch1C : switching.includes(i) ? switch2C : normalC]">
                             <div v-if="switching[0] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i+1]}}</div>
                             <div v-else-if="switching[1] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i-1]}}</div>
                             <div v-else class="p-3 size-[16vh] object-scale-down text-center algin-middle content-center text-[5vh]">{{number}}</div>
@@ -26,24 +23,32 @@
                 <div class="flex justify-center">
                     <div class="flex justify-center p-6">
                         <div v-on:click="genNewArr()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
-                            <div class="p-2">Generate New Array</div>
+                            <div class="p-2">Generate Random List</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="!running" v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Sort List</div>
                         </div>
+                        <div v-else v-on:click="canceled = true, cancel()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">Cancel</div>
+                        </div>
                     </div>
-                    <div class="flex">
-                        <div class="m-auto select-none">
-                            Sort Speed<br>
-                            <input v-model="speed" type="range" value="50" min="2" max="102" class="w-full h-6 rounded-lg appearance-none cursor-pointer bg-gray-700 accent-red-100">
+                    <div class="flex justify-center p-6">
+                        <div v-on:click="editMode = !editMode" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">Toggle Edit Mode</div>
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-center p-6 text-lg">
                     Number of Passes: {{passes}}, Current State: {{state}}
                 </div>
+                <div class="flex">
+                        <div class="m-auto select-none px-3">
+                            Sort Speed: {{speed-2}}<br>
+                            <input v-model="speed" type="range" value="50" min="2" max="102" class="w-full h-6 rounded-lg appearance-none cursor-pointer bg-gray-700 accent-red-100">
+                        </div>
+                    </div>
             </div>
         </div>
     </body>
@@ -51,6 +56,11 @@
     const app = Vue.createApp({
         data() {
             return {
+                activeC : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg select-none',
+                keepC : 'outline-[0.3vh] outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none',
+                switch1C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[19vh]',
+                switch2C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]',
+                normalC : 'outline-[0.2vh] outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none',
                 speed : 50,
                 sortedArray : [],
                 activeNumbers : [],
@@ -61,7 +71,10 @@
                 i : 0,
                 passes : 0,
                 state : "idle",
-                complete : false
+                complete : false,
+                canceled : false,
+                running : false,
+                editMode : false 
             }
         },
         mounted(){
@@ -82,7 +95,11 @@
                 }
             },
             async sort(){
-                while (!this.complete){
+                this.running = true
+                this.canceled = false
+                this.complete = false
+                while (!this.complete & !this.canceled){
+                    console.log(this.canceled)
                     if (this.proceed % 2 != 0){
                     if (this.i <= this.sortedArray.length - 1){
                         this.activeNumbers = []
@@ -129,13 +146,23 @@
             finish(){
                 if (!this.checkChange){
                     this.complete = true
+                    this.state = "idle"
+                    this.running = false
                 }
+                    
                 this.checkChange = false
                 this.keep = []
-                this.state = "idle"
             },
             sleep(msec){
                 return new Promise(resolve => setTimeout(resolve, this.speed*20));
+            },
+            cancel(){
+            this.state = "idle"
+            this.complete = true
+            this.running = false
+            this.activeNumbers = []
+            this.keep = []
+            this.switching = []
             }
         }
     })
