@@ -1,43 +1,48 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="main.js"></script>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body class="bg-gray-800">
-        <div id="app" class="flex h-screen text-white font-mono">
+    <body id="app" class="bg-gray-800 h-screen">
+        <div class="flex justify-center p-6 text-white font-mono text-4xl">Bubble Sort Algorithm</div>
+        <div class="flex h-9/10 text-white font-mono">
             <div class="m-auto">
+                <div v-if="complete" class="text-3xl flex justify-centerp-2">Sort Complete</div>
+                <div v-else class="p-5"></div>
                 <div class="p-10 grid grid-cols-7 gap-12" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
                     <div v-for="number, i in sortedArray" :id="i">
-                        <div v-if="activeNumbers.includes(i)" class="outline-1 outline-yellow-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none">
-                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
-                        </div>
-                        <div v-else-if="keep.includes(i)" class="outline-1 outline-green-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-green-600 transition-all select-none">
-                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
-                        </div>
-                        <div v-else-if="switching.includes(i)" class="outline-1 outline-red-500 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-red-600 transition-all select-none">
-                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
-                        </div>
-                        <div v-else class="outline-1 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-gray-400 transition-all select-none">
-                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-2xl">{{number}}</div>
-                        </div>
+                        <div :class="[activeNumbers.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg transition-all select-none' :
+                         keep.includes(i) ? 'outline-3 outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none' :
+                         switching.includes(i) & switching[0] == i ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-60' :
+                         switching.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-60' :
+                         'outline-1 outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 transition-all select-none']">
+                            <div class="p-3 w-48 h-48 text-center algin-middle content-center text-6xl">{{number}}</div>
+                        </div >
                     </div>
                 </div>
                 <div class="flex justify-center">
                     <div class="flex justify-center p-6">
-                        <div v-on:click="genNewArr()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-on:click="genNewArr()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Generate New Array</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Sort List</div>
                         </div>
                     </div>
+                    <div class="flex">
+                        <div class="m-auto">
+                            Sort Speed<br>
+                            <input v-model="speed" type="range" value="50" min="2" max="102" class="w-full h-6 rounded-lg appearance-none cursor-pointer bg-gray-700 accent-red-100">
+                        </div>
+                        
+                    </div>
+                    
                 </div>
                 <div class="flex justify-center p-6 text-lg">
-                    Number of Passes: {{passes}}, Current State: {{state}}, {{i}}
+                    Number of Passes: {{passes}}, Current State: {{state}}
                 </div>
             </div>
         </div>
@@ -46,31 +51,39 @@
     const app = Vue.createApp({
         data() {
             return {
+                speed : 50,
                 sortedArray : [],
                 activeNumbers : [],
                 keep : [],
                 switching : [],
+                checkChange : false,
                 proceed : 0,
                 i : 0,
                 passes : 0,
-                state : "idle"
+                state : "idle",
+                complete : false
             }
         },
         mounted(){
             this.genNewArr()
-            const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
             
         },
         methods: {
             genNewArr(){
+                this.activeNumbers = []
+                this.keep = []
+                this.switching = []
+                this.passes = 0
                 this.i = 0
                 this.sortedArray = []
-                for (let i = 0; i < 7; i++){
+                this.complete = false
+                for (let i = 0; i <7; i++){
                     this.sortedArray.push(Math.floor(Math.random() * 101))
                 }
             },
             async sort(){
-                if (this.proceed % 2 != 0){
+                while (!this.complete){
+                    if (this.proceed % 2 != 0){
                     if (this.i <= this.sortedArray.length - 1){
                         this.activeNumbers = []
                         this.keep = []
@@ -82,19 +95,19 @@
                             this.switching.push(this.i)
                             this.switching.push(this.i+1)
                             this.state = "switch"
-                        }
-                        else{
+                            this.checkChange = true
+                        } else{
                             this.keep.push(this.i)
                             this.keep.push(this.i+1)
                             this.state = "keep"
                         }
                         this.i += 1
-                    }
-                    else{
+                    } else{
                         this.i = 0
                         this.passes += 1
+                        this.finish()
                     }
-                }else{
+                } else{
                     if (this.i <= this.sortedArray.length - 2){
                         this.activeNumbers = []
                         this.keep = []
@@ -105,9 +118,22 @@
                     }else{
                         this.i = 0
                         this.passes += 1
+                        this.finish()
                     }
                 }
                 this.proceed += 1
+                await this.sleep(this.speed)
+                }
+                
+            },
+            finish(){
+                if (!this.checkChange){
+                    this.complete = true
+                }
+                this.checkChange = false
+            },
+            sleep(msec){
+                return new Promise(resolve => setTimeout(resolve, this.speed*20));
             }
         }
     })
