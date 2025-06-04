@@ -10,16 +10,16 @@
             <div class="m-auto">
                 <div v-if="complete" class="text-3xl flex justify-centerp-2">Sort Complete</div>
                 <div v-else class="p-5"></div>
-                <div class="p-10 grid grid-cols-7 gap-12" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
+                <div class="p-10 grid grid-cols-7 gap-[3vh]" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
                     <div v-for="number, i in sortedArray" :id="i">
-                        <div :class="[activeNumbers.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg select-none' :
-                         keep.includes(i) ? 'outline-3 outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none' :
-                         switching.includes(i) & switching[0] == i ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-60' :
-                         switching.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-60' :
-                         'outline-1 outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none']">
-                            <div v-if="switching[0] == i" class="p-3 w-48 h-48 text-center algin-middle content-center text-6xl">{{sortedArray[i+1]}}</div>
-                            <div v-else-if="switching[1] == i" class="p-3 w-48 h-48 text-center algin-middle content-center text-6xl">{{sortedArray[i-1]}}</div>
-                            <div v-else class="p-3 w-48 h-48 text-center algin-middle content-center text-6xl">{{number}}</div>
+                        <div :class="[activeNumbers.includes(i) ? 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg select-none' :
+                         keep.includes(i) ? 'outline-[0.3vh] outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none' :
+                         switching.includes(i) & switching[0] == i ? 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[19vh]' :
+                         switching.includes(i) ? 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]' :
+                         'outline-[0.2vh] outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none']">
+                            <div v-if="switching[0] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i+1]}}</div>
+                            <div v-else-if="switching[1] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i-1]}}</div>
+                            <div v-else class="p-3 size-[16vh] object-scale-down text-center algin-middle content-center text-[5vh]">{{number}}</div>
                         </div >
                     </div>
                 </div>
@@ -132,6 +132,7 @@
                 }
                 this.checkChange = false
                 this.keep = []
+                this.state = "idle"
             },
             sleep(msec){
                 return new Promise(resolve => setTimeout(resolve, this.speed*20));
