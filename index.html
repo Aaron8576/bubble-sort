@@ -13,7 +13,7 @@
                 <div v-else class="p-5"></div>
                 <div class="p-10 grid grid-cols-7 gap-[3vh]" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
                     <div v-for="number, i in sortedArray" :id="i">
-                        <div :class="[activeNumbers.includes(i) ? activeC : keep.includes(i) ? keepC : switching.includes(i) & switching[0] == i ? switch1C : switching.includes(i) ? switch2C : editMode ? editC : normalC]">
+                        <div :class="[activeNumbers.includes(i) ? activeC : keep.includes(i) ? keepC : switching.includes(i) & switching[0] == i & i % 7 == 6 ? switch3C : switching.includes(i) & switching[0] == i ? switch1C : switching.includes(i) & i % 7 == 0 ? switch4C : switching.includes(i) ? switch2C : editMode ? editC : normalC]">
                             <div v-if="switching[0] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i+1]}}</div>
                             <div v-else-if="switching[1] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i-1]}}</div>
                             <div v-else>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-if="!running" v-on:click="sort()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="!running" v-on:click="sort()" :class="[!editMode ? 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
                             <div class="p-2">Sort List</div>
                         </div>
                         <div v-else v-on:click="canceled = true, cancel()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
@@ -40,8 +40,21 @@
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-on:click="editMode = !editMode" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Toggle Edit Mode</div>
+                        </div>
+                        <div v-else class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
+                            <div class="p-2">Toggle Edit Mode</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center p-6">
+                        <div v-if="editMode" v-on:click="numbersInArray += 1, sortedArray.push(0)" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">+</div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center p-6">
+                        <div v-if="editMode" v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                            <div class="p-2">-</div>
                         </div>
                     </div>
                 </div>
@@ -65,6 +78,8 @@
                 keepC : 'outline-[0.3vh] outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none',
                 switch1C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[19vh]',
                 switch2C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]',
+                switch3C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[114vh] translate-y-[19vh]',
+                switch4C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[114vh] -translate-y-[19vh]',
                 normalC : 'outline-[0.2vh] outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none',
                 editC : 'outline-[0.2vh] outline-fuchsia-600 outline-offset-2 outline-solid hover:bg-fuchsia-900 bg-fuchsia-950 rounded-full hover:shadow-lg hover:shadow-fuchsia-600 select-none',
                 speed : 50,
@@ -80,7 +95,8 @@
                 complete : false,
                 canceled : false,
                 running : false,
-                editMode : false 
+                editMode : false,
+                numbersInArray : 7
             }
         },
         mounted(){
@@ -96,58 +112,58 @@
                 this.i = 0
                 this.sortedArray = []
                 this.complete = false
-                for (let i = 0; i <7; i++){
+                for (let i = 0; i <this.numbersInArray; i++){
                     this.sortedArray.push(Math.floor(Math.random() * 101))
                 }
             },
             async sort(){
-                this.running = true
-                this.canceled = false
-                this.complete = false
-                while (!this.complete & !this.canceled){
-                    console.log(this.canceled)
-                    if (this.proceed % 2 != 0){
-                    if (this.i <= this.sortedArray.length - 1){
-                        this.activeNumbers = []
-                        this.keep = []
-                        this.switching = []
-                        if (this.sortedArray[this.i] > this.sortedArray[this.i+1]){
-                            let temp = this.sortedArray[this.i]
-                            this.sortedArray[this.i] = this.sortedArray[this.i+1]
-                            this.sortedArray[this.i+1] = temp
-                            this.switching.push(this.i)
-                            this.switching.push(this.i+1)
-                            this.state = "switch"
-                            this.checkChange = true
+                if (!this.editMode){
+                    this.running = true
+                    this.canceled = false
+                    this.complete = false
+                    while (!this.complete & !this.canceled){
+                        if (this.proceed % 2 != 0){
+                        if (this.i <= this.sortedArray.length - 1){
+                            this.activeNumbers = []
+                            this.keep = []
+                            this.switching = []
+                            if (this.sortedArray[this.i] > this.sortedArray[this.i+1]){
+                                let temp = this.sortedArray[this.i]
+                                this.sortedArray[this.i] = this.sortedArray[this.i+1]
+                                this.sortedArray[this.i+1] = temp
+                                this.switching.push(this.i)
+                                this.switching.push(this.i+1)
+                                this.state = "switch"
+                                this.checkChange = true
+                            } else{
+                                this.keep.push(this.i)
+                                this.keep.push(this.i+1)
+                                this.state = "keep"
+                            }
+                            this.i += 1
                         } else{
-                            this.keep.push(this.i)
-                            this.keep.push(this.i+1)
-                            this.state = "keep"
+                            this.i = 0
+                            this.passes += 1
+                            this.finish()
                         }
-                        this.i += 1
                     } else{
-                        this.i = 0
-                        this.passes += 1
-                        this.finish()
+                        if (this.i <= this.sortedArray.length - 2){
+                            this.activeNumbers = []
+                            this.keep = []
+                            this.switching = []
+                            this.activeNumbers.push(this.i+0)
+                            this.activeNumbers.push(this.i+1)
+                            this.state = "check"
+                        }else{
+                            this.i = 0
+                            this.passes += 1
+                            this.finish()
+                        }
                     }
-                } else{
-                    if (this.i <= this.sortedArray.length - 2){
-                        this.activeNumbers = []
-                        this.keep = []
-                        this.switching = []
-                        this.activeNumbers.push(this.i+0)
-                        this.activeNumbers.push(this.i+1)
-                        this.state = "check"
-                    }else{
-                        this.i = 0
-                        this.passes += 1
-                        this.finish()
+                    this.proceed += 1
+                    await this.sleep(this.speed)
                     }
                 }
-                this.proceed += 1
-                await this.sleep(this.speed)
-                }
-                
             },
             finish(){
                 if (!this.checkChange){
