@@ -4,14 +4,14 @@
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body id="app" class="bg-gray-800 h-screen">
+    <body id="app" class="bg-[#002744] h-screen">
         <div class="flex justify-center p-6 text-white font-mono text-4xl">Bubble Sort Algorithm</div>
         <div class="flex h-8/10 text-white font-mono">
             <div class="m-auto">
                 <div v-if="canceled & complete" class="text-3xl flex justify-center p-2">Sort Canceled</div>
                 <div v-else-if="complete &! canceled" class="text-3xl flex justify-center p-2">Sort Complete</div>
                 <div v-else class="p-5"></div>
-                <div class="p-10 grid grid-cols-7 gap-[3vh]" enter-from-class="translate-x-[150%] opacity-0" id="numbers">
+                <div class="p-10 grid grid-cols-7 gap-[3vh]" enter-from-class="translate-x-[150%] opacity-0">
                     <div v-for="number, i in sortedArray" :id="i">
                         <div :class="[activeNumbers.includes(i) ? activeC : keep.includes(i) ? keepC : switching.includes(i) & switching[0] == i & i % 7 == 6 ? switch3C : switching.includes(i) & switching[0] == i ? switch1C : switching.includes(i) & i % 7 == 0 ? switch4C : switching.includes(i) ? switch2C : editMode ? editC : normalC]">
                             <div v-if="switching[0] == i" class="p-3 size-[16vh] text-center algin-middle content-center text-[5vh]">{{sortedArray[i+1]}}</div>
@@ -36,33 +36,33 @@
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-on:click="genNewArr()" :class="[!running ? 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
+                        <div v-on:click="genNewArr()" :class="[!running ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
                             <div class="p-2">Generate Random List</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-if="!running" v-on:click="sort(), proceed = 0" :class="[!editMode ? 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
+                        <div v-if="!running" v-on:click="sort()" :class="[!editMode ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
                             <div class="p-2">Sort List</div>
                         </div>
-                        <div v-else v-on:click="canceled = true, cancel()" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-else v-on:click="canceled = true, cancel()" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Cancel</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">Toggle Edit Mode</div>
                         </div>
-                        <div v-else class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
+                        <div v-else class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
                             <div class="p-2">Toggle Edit Mode</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-if="editMode & numbersInArray < 21" v-on:click="numbersInArray += 1, sortedArray.push(0)" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="editMode & numbersInArray < 21" v-on:click="numbersInArray++, sortedArray.push(0)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">+</div>
                         </div>
                     </div>
                     <div class="flex justify-center p-6">
-                        <div v-if="editMode & numbersInArray > 0" v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
+                        <div v-if="editMode & numbersInArray > 0" v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
                             <div class="p-2">-</div>
                         </div>
                     </div>
@@ -88,10 +88,7 @@
                 keep : [],
                 switching : [],
                 checkChange : false,
-                proceed : 0,
-                i : 0,
                 passes : 0,
-                state : "idle",
                 complete : false,
                 canceled : false,
                 running : false,
@@ -107,11 +104,7 @@
             genNewArr(){
                 if (!this.running){
                     this.actions = 0
-                    this.activeNumbers = []
-                    this.keep = []
-                    this.switching = []
                     this.passes = 0
-                    this.i = 0
                     this.sortedArray = []
                     this.complete = false
                     for (let i = 0; i <this.numbersInArray; i++){
@@ -121,73 +114,55 @@
             },
             async sort(){
                 if (!this.editMode){
+                    let proceed = 0
+                    let i = 0
                     this.running = true
                     this.canceled = false
                     this.complete = false
                     while (!this.complete & !this.canceled){
-                        if (this.proceed % 2 != 0){
-                        if (this.i <= this.sortedArray.length - 1){
-                            this.activeNumbers = []
-                            this.keep = []
-                            this.switching = []
-                            if (this.sortedArray[this.i] > this.sortedArray[this.i+1]){
-                                let temp = this.sortedArray[this.i]
-                                this.sortedArray[this.i] = this.sortedArray[this.i+1]
-                                this.sortedArray[this.i+1] = temp
-                                this.switching.push(this.i)
-                                this.switching.push(this.i+1)
-                                this.state = "switch"
-                                this.checkChange = true
-                                this.actions += 1
+                        this.activeNumbers = []
+                        this.keep = []
+                        this.switching = []
+                        if (i <= this.sortedArray.length - 2){
+                            if (proceed % 2 != 0){
+                                    if (this.sortedArray[i] > this.sortedArray[i+1]){
+                                        let temp = this.sortedArray[i]
+                                        this.sortedArray[i] = this.sortedArray[i+1]
+                                        this.sortedArray[i+1] = temp
+                                        this.switching.push(i, i+1)
+                                        this.checkChange = true
+                                        this.actions++
+                                    } else{
+                                        this.keep.push(i, i+1)
+                                    }
+                                    i++
                             } else{
-                                this.keep.push(this.i)
-                                this.keep.push(this.i+1)
-                                this.state = "keep"
+                                this.activeNumbers.push(i+0, i+1)
+                                this.actions++
                             }
-                            this.i += 1
                         } else{
-                            this.i = 0
-                            this.passes += 1
-                            this.finish()
-                        }
-                    } else{
-                        if (this.i <= this.sortedArray.length - 2){
-                            this.activeNumbers = []
-                            this.keep = []
+                            i = 0
+                            this.passes++
+                            this.activeNumbers = [0, 1]
                             this.switching = []
-                            this.activeNumbers.push(this.i+0)
-                            this.activeNumbers.push(this.i+1)
-                            this.state = "check"
-                            this.actions += 1
-                        }else{
-                            this.i = 0
-                            this.passes += 1
-                            this.finish()
+                            this.keep = []
+                            if (!this.checkChange){
+                                this.complete = true
+                                this.running = false
+                                this.activeNumbers = []
+                                this.actions =  0
+                            }
+                            this.checkChange = false
                         }
-                    }
-                    this.proceed += 1
-                    await this.sleep(this.speed)
+                        proceed++
+                        await this.sleep(this.speed)
                     }
                 }
-            },
-            finish(){
-                this.activeNumbers = [0, 1]
-                this.switching = []
-                this.keep = []
-                if (!this.checkChange){
-                    this.complete = true
-                    this.state = "idle"
-                    this.running = false
-                    this.activeNumbers = []
-                    this.actions =  0
-                }
-                this.checkChange = false
             },
             sleep(msec){
                 return new Promise(resolve => setTimeout(resolve, (100-this.speed)*20));
             },
             cancel(){
-                this.state = "idle"
                 this.complete = true
                 this.running = false
                 this.activeNumbers = []
