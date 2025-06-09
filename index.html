@@ -77,9 +77,9 @@
                 activeC : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 hover:shadow-yellow-600 outline-solid rounded-full hover:shadow-lg select-none',
                 keepC : 'outline-[0.3vh] outline-green-500 hover:bg-green-800 bg-green-950 outline-offset-2 hover:shadow-green-600 outline-solid rounded-full hover:shadow-lg transition-all select-none',
                 switch1C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[19vh]',
-                switch2C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]',
-                switch3C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[114vh] translate-y-[19vh]',
-                switch4C : 'outline-3 outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[114vh] -translate-y-[19vh]',
+                switch2C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[19vh]',
+                switch3C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none -translate-x-[114vh] translate-y-[19vh]',
+                switch4C : 'outline-[0.3vh] outline-yellow-500 hover:bg-yellow-800 bg-yellow-950 outline-offset-2 outline-solid rounded-full hover:shadow-lg hover:shadow-yellow-600 transition-all select-none translate-x-[114vh] -translate-y-[19vh]',
                 normalC : 'outline-[0.2vh] outline-offset-2 outline-solid hover:bg-gray-600 bg-gray-700 rounded-full hover:shadow-lg hover:shadow-gray-400 select-none',
                 editC : 'outline-[0.2vh] outline-fuchsia-600 outline-offset-2 outline-solid hover:bg-fuchsia-900 bg-fuchsia-950 rounded-full hover:shadow-lg hover:shadow-fuchsia-600 select-none',
                 speed : 50,
@@ -187,12 +187,12 @@
                 return new Promise(resolve => setTimeout(resolve, (100-this.speed)*20));
             },
             cancel(){
-            this.state = "idle"
-            this.complete = true
-            this.running = false
-            this.activeNumbers = []
-            this.keep = []
-            this.switching = []
+                this.state = "idle"
+                this.complete = true
+                this.running = false
+                this.activeNumbers = []
+                this.keep = []
+                this.switching = []
             }
         }
     })
