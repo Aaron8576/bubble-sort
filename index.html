@@ -4,9 +4,9 @@
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     </head>
-    <body id="app" class="bg-[#002744] h-screen">
+    <body id="app" class="bg-[#002744] flex flex-col h-screen">
         <div class="flex justify-center p-6 text-white font-mono text-4xl">Bubble Sort Algorithm</div>
-        <div class="flex h-8/10 text-white font-mono">
+        <div class="flex text-white flex-grow font-mono">
             <div class="m-auto">
                 <div v-if="canceled & complete" class="text-3xl flex justify-center p-2">Sort Canceled</div>
                 <div v-else-if="complete &! canceled" class="text-3xl flex justify-center p-2">Sort Complete</div>
@@ -25,47 +25,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="absolute left-0 bottom-0 flex w-screen justify-center">
-                    <div class="absolute bottom-[8vh] flex justify-center p-6 text-lg">
-                        Number of Passes: {{passes}}, Total Actions: {{actions}}
-                    </div>
-                    <div class="absolute left-0 bottom-[13vh] flex w-screen justify-center">
-                        <div class="m-auto select-none px-3">
-                            Sort Speed: {{speed}}<br>
-                            <input v-model="speed" type="range" value="50" min="2" max="98" class="w-full h-6 rounded-lg appearance-none cursor-pointer bg-gray-700 accent-red-100">
-                        </div>
-                    </div>
-                    <div class="flex justify-center p-6">
-                        <div v-on:click="genNewArr()" :class="[!running ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
-                            <div class="p-2">Generate Random List</div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center p-6">
-                        <div v-if="!running" v-on:click="sort()" :class="[!editMode ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none']">
-                            <div class="p-2">Sort List</div>
-                        </div>
-                        <div v-else v-on:click="canceled = true, cancel()" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
-                            <div class="p-2">Cancel</div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center p-6">
-                        <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
-                            <div class="p-2">Toggle Edit Mode</div>
-                        </div>
-                        <div v-else class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
-                            <div class="p-2">Toggle Edit Mode</div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center p-6">
-                        <div v-if="editMode & numbersInArray < 21" v-on:click="numbersInArray++, sortedArray.push(0)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
-                            <div class="p-2">+</div>
-                        </div>
-                    </div>
-                    <div class="flex justify-center p-6">
-                        <div v-if="editMode & numbersInArray > 0" v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-2xl transition-all cursor-pointer select-none active:scale-110">
-                            <div class="p-2">-</div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="flex w-screen justify-center text-white font-mono">
+            <div class="absolute bottom-[10vh] flex justify-center p-6 text-lg">
+                Number of Passes: {{passes}}, Total Actions: {{actions}}
+            </div>
+            <div class="absolute bottom-[14vh] p-6 flex w-screen justify-center">
+                <div class="m-auto select-none px-3">
+                    Sort Speed: {{speed}}<br>
+                    <input v-model="speed" type="range" value="50" min="2" max="98" class="w-full h-6 rounded-lg appearance-none cursor-pointer bg-gray-700 accent-red-100">
+                </div>
+            </div>
+            <div class="flex justify-center p-6">
+                <div v-on:click="genNewArr()" :class="[!running ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-orange-300 hover:outline-orange-200 hover:shadow-lg hover:bg-yellow-950 hover:shadow-orange-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-[1vw] transition-all cursor-not-allowed select-none']">
+                    <div class="p-2">Generate Random List</div>
+                </div>
+            </div>
+            <div class="flex justify-center p-6">
+                <div v-if="!running" v-on:click="sort()" :class="[!editMode ? 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110' : 'rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-[1vw] transition-all cursor-not-allowed select-none']">
+                    <div class="p-2">Sort List</div>
+                </div>
+                <div v-else v-on:click="canceled = true, cancel()" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
+                    <div class="p-2">Cancel</div>
+                </div>
+            </div>
+            <div class="flex justify-center p-6">
+                <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
+                    <div class="p-2">Toggle Edit Mode</div>
+                </div>
+                <div v-else class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
+                    <div class="p-2">Toggle Edit Mode</div>
+                </div>
+            </div>
+            <div v-if="editMode & numbersInArray < 21" class="flex justify-center p-6">
+                <div  v-on:click="numbersInArray++, sortedArray.push(0)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-green-300 hover:outline-green-200 hover:shadow-lg hover:bg-green-900 hover:shadow-green-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
+                    <div class="p-2">+</div>
+                </div>
+            </div>
+            <div v-if="editMode & numbersInArray > 0" class="flex justify-center p-6">
+                <div v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
+                    <div class="p-2">-</div>
                 </div>
             </div>
         </div>
