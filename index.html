@@ -55,7 +55,7 @@
                 <div v-if="!running" v-on:click="editMode = !editMode" class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-sky-300 hover:outline-sky-200 hover:shadow-lg hover:bg-sky-900 hover:shadow-sky-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
                     <div class="p-2">Toggle Edit Mode</div>
                 </div>
-                <div v-else class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-2xl transition-all cursor-not-allowed select-none">
+                <div v-else class="rounded-full w-[15vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-gray-300 text-[1vw] transition-all cursor-not-allowed select-none">
                     <div class="p-2">Toggle Edit Mode</div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div v-if="editMode & numbersInArray > 0" class="flex justify-center p-6">
-                <div v-on:click="numbersInArray -= 1, sortedArray.pop(-1)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
+                <div v-on:click="numbersInArray--, sortedArray.pop(-1)" class="rounded-full w-[3vw] text-center p-3 outline-2 outline-offset-2, outline-solid, outline-red-400 hover:outline-red-300 hover:shadow-lg hover:bg-red-950 hover:shadow-red-500/50 text-[1vw] transition-all cursor-pointer select-none active:scale-110">
                     <div class="p-2">-</div>
                 </div>
             </div>
