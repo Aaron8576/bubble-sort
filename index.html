@@ -104,8 +104,6 @@
         methods: {
             genNewArr(){
                 if (!this.running){
-                    this.actions = 0
-                    this.passes = 0
                     this.sortedArray = []
                     this.complete = false
                     for (let i = 0; i <this.numbersInArray; i++){
@@ -115,6 +113,8 @@
             },
             async sort(){
                 if (!this.editMode){
+                    this.passes = 0
+                    this.actions = 0
                     let proceed = 0
                     let i = 0
                     this.running = true
@@ -151,7 +151,6 @@
                                 this.complete = true
                                 this.running = false
                                 this.activeNumbers = []
-                                this.actions =  0
                             }
                             this.checkChange = false
                         }
